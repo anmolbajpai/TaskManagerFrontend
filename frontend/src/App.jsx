@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
-import TaskDashboard from "./components/TaskDashboard";
+import TaskDashboard from "./components/TaskDashBoard";
 
 function App() {
   return (
