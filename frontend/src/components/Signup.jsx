@@ -49,6 +49,7 @@ export default function Signup() {
       toast.error("Something went wrong ❌");
     } finally {
       setLoading(false);
+       console.log(`${API}/taskmanager/auth/signup`);
     }
   };
 
