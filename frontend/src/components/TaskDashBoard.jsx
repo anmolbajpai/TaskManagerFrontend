@@ -77,8 +77,6 @@ const [showEdit, setShowEdit] = useState(false);
       throw new Error("Failed to fetch tasks");
     }
 
-    console.log("API DATA:", data);
-
   
     const formattedTasks = data.map(item => ({
       id: item.id,
