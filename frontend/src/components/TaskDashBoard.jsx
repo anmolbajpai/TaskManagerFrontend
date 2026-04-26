@@ -5,7 +5,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { set } from "react-datepicker/dist/dist/date_utils.js";
 
 
 const PRIORITIES = [ "HIGH", "MEDIUM", "LOW"];
@@ -17,6 +16,7 @@ const PRIORITY_CONFIG = {
 };
 
 const priorityOrder = { HIGH: 1, MEDIUM: 2, LOW: 3 };
+const API = import.meta.env.VITE_API_URL;
 
 export default function TaskDashboard() {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const [showEdit, setShowEdit] = useState(false);
 
   try {
     const response = await fetch(
-      `http://localhost:8888/taskmanager/tasks/deleteTask/${taskId}`,
+      `${API}/taskmanager/tasks/deleteTask/${taskId}`,
       {
         method: "DELETE",
         headers: {
@@ -50,7 +50,6 @@ const [showEdit, setShowEdit] = useState(false);
       throw new Error("Failed to delete task");
     }
 
-    // 👇 UI update (remove task from state)
     setTasks(prev => prev.filter(task => task.id !== taskId));
     toast.success("Task deleted successfully!");
 
@@ -64,10 +63,10 @@ const [showEdit, setShowEdit] = useState(false);
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("http://localhost:8888/taskmanager/tasks/getTasks", {
+    const response = await fetch(`${API}/taskmanager/tasks/getTasks`, {
       method: "GET",
       headers: {
-        "Authorization": token, // 👈 JWT use kar raha hai tu
+        "Authorization": token, 
         "Content-Type": "application/json"
       }
     });
@@ -80,11 +79,11 @@ const [showEdit, setShowEdit] = useState(false);
 
     console.log("API DATA:", data);
 
-    // 🔥 mapping backend → frontend
+  
     const formattedTasks = data.map(item => ({
       id: item.id,
       name: item.task,
-      priority: item.priority, // 👈 IMPORTANT (HIGH → high)
+      priority: item.priority, 
       created: item.duedatetime, 
       done: item.done
     }));
@@ -99,7 +98,6 @@ const [showEdit, setShowEdit] = useState(false);
   useEffect(() =>{
     
     const storedUser = localStorage.getItem("user");
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setUser(storedUser);
     const token = localStorage.getItem("token");
     setToken(token);
@@ -156,10 +154,10 @@ const addTask = async () => {
 
 
   try {
-    const response = await fetch("http://localhost:8888/taskmanager/tasks/add", {
+    const response = await fetch(`${API}/taskmanager/tasks/add`, {
       method: "POST",
       headers: {
-        "Authorization": token, // 👈 agar backend Bearer maangta hai toh "Bearer " + token
+        "Authorization": token, 
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -190,7 +188,7 @@ const updateTask = async () => {
 
   try {
     const response = await fetch(
-      `http://localhost:8888/taskmanager/tasks/edit/${editTask.id}`,
+      `${API}/taskmanager/tasks/edit/${editTask.id}`,
       {
         method: "PUT",
         headers: {
@@ -226,7 +224,7 @@ const toggleTask = async (taskId, currentDone) => {
 
   try {
     const response = await fetch(
-      `http://localhost:8888/taskmanager/tasks/toggleDone/${taskId}`,
+      `${API}/taskmanager/tasks/toggleDone/${taskId}`,
       {
         method: "PUT",
         headers: {
@@ -234,7 +232,7 @@ const toggleTask = async (taskId, currentDone) => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          done: !currentDone   // 🔥 toggle value
+          done: !currentDone 
         })
       }
     );
@@ -243,7 +241,6 @@ const toggleTask = async (taskId, currentDone) => {
       throw new Error("Failed to toggle task");
     }
 
-    // ✅ update UI instantly (no reload feel)
     setTasks(prev =>
       prev.map(task =>
         task.id === taskId
@@ -257,10 +254,6 @@ const toggleTask = async (taskId, currentDone) => {
     toast.error("Failed to toggle task!");
   }
 };
-
-
-
-
 
 return (
     <div className="app">
