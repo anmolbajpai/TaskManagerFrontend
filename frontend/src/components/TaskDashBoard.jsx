@@ -227,19 +227,39 @@ export default function TaskDashboard() {
 
       {/* Topbar */}
       <header className="topbar">
-        <h2>TaskManager</h2>
-        <div className="user-menu" onClick={e => e.stopPropagation()}>
-          <div className="avatar" onClick={() => setShowMenu(prev => !prev)}>
-            {user ? user.charAt(0).toUpperCase() : "G"}
-          </div>
-          {showMenu && (
-            <div className="dropdown">
-              <p className="dropdown-name">{user}</p>
-              <button className="logout-btn" onClick={handleLogout}>Logout</button>
-            </div>
-          )}
-        </div>
-      </header>
+  <h2>TaskManager</h2>
+
+  <div className="user-menu" onClick={e => e.stopPropagation()}>
+    
+    <div className="avatar" onClick={() => setShowMenu(prev => !prev)}>
+      {user ? user.charAt(0).toUpperCase() : "G"}
+    </div>
+
+    {showMenu && (
+      <div className="dropdown">
+
+        {user ? (
+          // ✅ Logged in UI
+          <>
+            <p className="dropdown-name">{user}</p>
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          // ❌ Not logged in UI
+          <>
+            <button className="login-btn" onClick={() => navigate("/login")}>
+              Login
+            </button>
+          </>
+        )}
+
+      </div>
+    )}
+    
+  </div>
+</header>
 
       {/* Main */}
       <main className="main">
